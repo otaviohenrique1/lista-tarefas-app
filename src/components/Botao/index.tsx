@@ -12,5 +12,11 @@ export function Botao(props: BotaoProps) {
 }
 
 const BotaoEstilizado = styled.button`
-  
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25px;
+  height: 25px;
+  padding: 0;
 `;

@@ -20,8 +20,6 @@ export function ContainerApp(props: ContainerProps) {
   );
 }
 
-
-
 export const ContainerBotoes = styled.div`
   display: flex;
   flex-direction: row;

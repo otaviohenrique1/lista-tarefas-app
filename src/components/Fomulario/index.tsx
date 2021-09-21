@@ -43,12 +43,12 @@ export function Formulario() {
               erro={(errors.tarefa && touched.tarefa) ? (<Mensagem mensagem={errors.tarefa}/>) : null}
             />
             <ContainerBotoes>
-              <Botao type="submit">
+              <BotaoSalvar type="submit">
                 <AiOutlineSave size={15} />
-              </Botao>
-              <Botao type="reset">
+              </BotaoSalvar>
+              <BotaoLimpar type="reset">
                 <AiOutlineClear size={15} />
-              </Botao>
+              </BotaoLimpar>
             </ContainerBotoes>
           </FormularioEstilizado>
         )}
@@ -56,6 +56,14 @@ export function Formulario() {
     </>
   );
 }
+
+const BotaoSalvar = styled(Botao)`
+  background-color: deepskyblue;
+`;
+
+const BotaoLimpar = styled(Botao)`
+  background-color: mediumspringgreen;
+`;
 
 const FormularioEstilizado = styled(Form)`
   display: flex;
