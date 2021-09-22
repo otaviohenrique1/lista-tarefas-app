@@ -1,4 +1,4 @@
-import { Formik, Form } from "formik";
+import { Formik, Form, FormikHelpers } from "formik";
 import styled from "styled-components";
 import * as Yup from "yup";
 import { MensagemErro } from "../../utils/utils";
@@ -7,6 +7,8 @@ import { Campo } from "../Campo";
 import { Mensagem } from "../Mensagem";
 import { AiOutlineClear, AiOutlineSave } from "react-icons/ai";
 import { ContainerBotoes } from "../Container";
+import { useDispatch } from "react-redux";
+import { adicionaTarefa } from "../../features/TarefasSlice";
 
 interface FormTypes {
   tarefa: string;
@@ -21,8 +23,19 @@ const validacao = Yup.object().shape({
 });
 
 export function Formulario() {
-  function handleSubmitForm(values: FormTypes) {
-    alert(`Tarefa => ${values.tarefa}`);
+  const dispatch = useDispatch();
+
+  function handleSubmitForm(values: FormTypes, formikHelpers: FormikHelpers<FormTypes>) {
+    // alert(`Tarefa => ${values.tarefa}`);
+    const id = Math.floor(Math.random() * 100000);
+
+    dispatch(adicionaTarefa({
+      id: id,
+      tarefa: values.tarefa
+    }));
+    alert('Item salvo');
+
+    formikHelpers.resetForm();
   }
 
   return (
@@ -42,20 +55,24 @@ export function Formulario() {
               value={values.tarefa}
               erro={(errors.tarefa && touched.tarefa) ? (<Mensagem mensagem={errors.tarefa}/>) : null}
             />
-            <ContainerBotoes>
+            <ContainerBotoesEstilizado>
               <BotaoSalvar type="submit">
                 <AiOutlineSave size={15} />
               </BotaoSalvar>
               <BotaoLimpar type="reset">
                 <AiOutlineClear size={15} />
               </BotaoLimpar>
-            </ContainerBotoes>
+            </ContainerBotoesEstilizado>
           </FormularioEstilizado>
         )}
       </Formik>
     </>
   );
 }
+
+const ContainerBotoesEstilizado = styled(ContainerBotoes)`
+  margin-left: 15px;
+`;
 
 const BotaoSalvar = styled(Botao)`
   background-color: deepskyblue;
