@@ -2,9 +2,13 @@ import styled from "styled-components";
 import { Botao } from "../Botao";
 import { ContainerBotoes } from "../Container";
 import { AiOutlineEdit, AiOutlineDelete, AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
-import { FormEvent, useState } from "react";
+import { FormEvent, FormEventHandler, MouseEventHandler, useState } from "react";
 import { useDispatch } from "react-redux";
 import { removeTarefa } from "../../features/TarefasSlice";
+import { Form, Formik } from "formik";
+import { FormTypes, validacao } from "../Fomulario";
+import { Campo } from "../Campo";
+import { Mensagem } from "../Mensagem";
 
 interface ItemProps {
   id: string;
@@ -58,29 +62,47 @@ export function Item(props: ItemProps) {
         </>
       ) : (  
         <>
-          <TarefaTitulo
-            style={{ textDecoration: (!itemChecked) ? 'line-through' : 'none' }}
-          >
-            {props.tarefa}
-          </TarefaTitulo>
-          <ContainerBotoes>
-            <BotaoEditar
-              type="button"
-              onClick={() => setModoEdicaoItem(!modoEdicaoItem)}
-            >
-              <AiOutlineEdit size={15} />
-            </BotaoEditar>
-            <form onSubmit={handleApagarItem}>
-              <BotaoApagar
-                type="submit"
-              >
-                <AiOutlineDelete size={15} />
-              </BotaoApagar>
-            </form>
-          </ContainerBotoes>
+          <ItemNaoEditado
+            itemChecked={itemChecked}
+            tarefa={props.tarefa}
+            onClickBotaoEditar={() => setModoEdicaoItem(!modoEdicaoItem)}
+            onSubmitForm={handleApagarItem}
+          />
         </>
       )}
     </ItemEstilizado>
+  );
+}
+
+interface ItemNaoEditadoProps {
+  itemChecked: boolean;
+  tarefa: string;
+  onClickBotaoEditar: MouseEventHandler<HTMLButtonElement>;
+  onSubmitForm: FormEventHandler<HTMLFormElement>
+}
+
+function ItemNaoEditado(props: ItemNaoEditadoProps) {
+  return (
+    <>
+      <TarefaTitulo
+        style={{ textDecoration: (!props.itemChecked) ? 'line-through' : 'none' }}
+      >
+        {props.tarefa}
+      </TarefaTitulo>
+      <ContainerBotoes>
+        <BotaoEditar
+          type="button"
+          onClick={props.onClickBotaoEditar}
+        >
+          <AiOutlineEdit size={15} />
+        </BotaoEditar>
+        <form onSubmit={props.onSubmitForm}>
+          <BotaoApagar type="submit">
+            <AiOutlineDelete size={15} />
+          </BotaoApagar>
+        </form>
+      </ContainerBotoes>
+    </>
   );
 }
 
@@ -101,10 +123,6 @@ const ItemEstilizado = styled.li`
   border-color: cadetblue;
   border-width: 1px;
   border-style: solid;
-  /* padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 10px;
-  padding-right: 10px; */
   padding: 10px;
   border-radius: 10px;
 
@@ -116,10 +134,6 @@ const ItemEstilizado = styled.li`
   &:first-child {
     margin-bottom: 0;
   }
-
-  /* &:last-child {
-    margin-top: 0;
-  } */
 `;
 
 const BotaoEditar = styled(Botao)`
@@ -140,7 +154,6 @@ const BotaoCancelar = styled(Botao)`
 
 const TarefaTitulo = styled.span`
   text-align: start;
-  /* background-color: coral; */
   width: 100%;
   margin-right: 5px;
   margin-left: 5px;
@@ -168,3 +181,35 @@ export const ItemListaVaziaEstilizado = styled.li`
   padding: 10px;
   border-radius: 10px;
 `;
+
+interface FormularioEdicaoProps {
+  valorCampo: string;
+}
+
+export function FormularioEdicao(props: FormularioEdicaoProps) {
+  const valoresIniciais: FormTypes = {
+    tarefa: props.valorCampo || '',
+  };
+  
+  return (
+    <Formik
+      initialValues={valoresIniciais}
+      validationSchema={validacao}
+      onSubmit={() => {}}
+    >
+      {({ errors, touched, values }) => (
+        <Form>
+          <Campo
+            id="tarefa"
+            name="tarefa"
+            type="text"
+            placeholder="Nome da tarefa"
+            value={values.tarefa}
+            erro={(errors.tarefa && touched.tarefa) ? (<Mensagem mensagem={errors.tarefa}/>) : null}
+          />
+        </Form>
+      )}
+      
+    </Formik>
+  );
+}

@@ -10,15 +10,15 @@ import { ContainerBotoes } from "../Container";
 import { useDispatch } from "react-redux";
 import { adicionaTarefa } from "../../features/TarefasSlice";
 
-interface FormTypes {
+export interface FormTypes {
   tarefa: string;
 }
 
-const valoresIniciais: FormTypes = {
+export const valoresIniciais: FormTypes = {
   tarefa: '',
 };
 
-const validacao = Yup.object().shape({
+export const validacao = Yup.object().shape({
   tarefa: Yup.string().required(MensagemErro('tarefa')),
 });
 
