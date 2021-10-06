@@ -26,7 +26,6 @@ export function Formulario() {
   const dispatch = useDispatch();
 
   function handleSubmitForm(values: FormTypes, formikHelpers: FormikHelpers<FormTypes>) {
-    // alert(`Tarefa => ${values.tarefa}`);
     const id = Math.floor(Math.random() * 100000);
 
     dispatch(adicionaTarefa({

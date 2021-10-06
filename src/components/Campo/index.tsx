@@ -22,11 +22,8 @@ export function Campo(props: CampoProps) {
 }
 
 const CampoEstilizado = styled(Field)`
-  /* margin-right: 10px; */
   font-size: 15px;
   width: 100%;
-  /* width: 205px; */
-  /* width: 98%; */
 `;
 
 const ContainerCampo = styled.div`

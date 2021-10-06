@@ -1,4 +1,3 @@
-import React from 'react';
 import { ListaTarefas } from './pages/ListaTarefas';
 
 function App() {

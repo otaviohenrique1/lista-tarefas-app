@@ -18,20 +18,20 @@ export const tarefaSlice = createSlice({
   initialState: tarefaInitialState,
   reducers: {
     adicionaTarefa: (state, action: PayloadAction<TarefaState>) => {
-      const novaEmpresa: TarefaState = {
+      const novaTarefa: TarefaState = {
         id: action.payload.id,
         tarefa: action.payload.tarefa,
       };
       return {
         ...state,
-        tarefas: state.tarefas.concat(novaEmpresa)
+        tarefas: state.tarefas.concat(novaTarefa)
       };
     },
     removeTarefa: (state, action: PayloadAction<TarefaState>) => {
-      const empresaRemovida: TarefaState[] = state.tarefas.filter((tarefa) => tarefa.id !== action.payload.id);
+      const tarefaRemovida: TarefaState[] = state.tarefas.filter((tarefa) => tarefa.id !== action.payload.id);
       return {
         ...state,
-        tarefas: empresaRemovida
+        tarefas: tarefaRemovida
       };
     }
   }

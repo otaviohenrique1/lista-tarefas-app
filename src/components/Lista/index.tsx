@@ -1,11 +1,9 @@
-// import { ReactNode } from "react";
 import styled from "styled-components";
 import { TarefaState } from "../../features/TarefasSlice";
 import { Item, ItemListaVazia } from "../Item";
 
 interface ListaProps {
   data: TarefaState[];
-  // children: ReactNode;
 }
 
 export function Lista(props: ListaProps) {

@@ -1,14 +1,10 @@
 import styled from "styled-components";
 import { Botao } from "../Botao";
 import { ContainerBotoes } from "../Container";
-import { AiOutlineEdit, AiOutlineDelete, AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
-import { FormEvent, FormEventHandler, MouseEventHandler, useState } from "react";
+import { AiOutlineDelete } from "react-icons/ai";
+import { FormEvent, useState } from "react";
 import { useDispatch } from "react-redux";
 import { removeTarefa } from "../../features/TarefasSlice";
-import { Form, Formik } from "formik";
-import { FormTypes, validacao } from "../Fomulario";
-import { Campo } from "../Campo";
-import { Mensagem } from "../Mensagem";
 
 interface ItemProps {
   id: string;
@@ -17,7 +13,6 @@ interface ItemProps {
 
 export function Item(props: ItemProps) {
   const [itemChecked, setItemChecked] = useState<boolean>(true);
-  const [modoEdicaoItem, setModoEdicaoItem] = useState<boolean>(false);
   const dispatch = useDispatch();
 
   function handleApagarItem(event: FormEvent) {
@@ -36,82 +31,22 @@ export function Item(props: ItemProps) {
         name="check"
         id="checkItem"
         onClick={() => { setItemChecked(!itemChecked); }}
-        disabled={(modoEdicaoItem) ? true : false}
       />
-      {(modoEdicaoItem) ? (
-        <>
-          <CampoItem
-            type="text"
-            value={props.tarefa}
-            onChange={() => {}}
-          />
-          <ContainerBotoes>
-            <BotaoSalvar
-              type="button"
-              onClick={() => setModoEdicaoItem(!modoEdicaoItem)}
-            >
-              <AiOutlineCheckCircle size={15} />
-            </BotaoSalvar>
-            <BotaoCancelar
-              type="button"
-              onClick={() => setModoEdicaoItem(!modoEdicaoItem)}
-            >
-              <AiOutlineCloseCircle size={15} />
-            </BotaoCancelar>
-          </ContainerBotoes>
-        </>
-      ) : (  
-        <>
-          <ItemNaoEditado
-            itemChecked={itemChecked}
-            tarefa={props.tarefa}
-            onClickBotaoEditar={() => setModoEdicaoItem(!modoEdicaoItem)}
-            onSubmitForm={handleApagarItem}
-          />
-        </>
-      )}
-    </ItemEstilizado>
-  );
-}
-
-interface ItemNaoEditadoProps {
-  itemChecked: boolean;
-  tarefa: string;
-  onClickBotaoEditar: MouseEventHandler<HTMLButtonElement>;
-  onSubmitForm: FormEventHandler<HTMLFormElement>
-}
-
-function ItemNaoEditado(props: ItemNaoEditadoProps) {
-  return (
-    <>
       <TarefaTitulo
-        style={{ textDecoration: (!props.itemChecked) ? 'line-through' : 'none' }}
+        style={{ textDecoration: (!itemChecked) ? 'line-through' : 'none' }}
       >
         {props.tarefa}
       </TarefaTitulo>
       <ContainerBotoes>
-        <BotaoEditar
-          type="button"
-          onClick={props.onClickBotaoEditar}
-        >
-          <AiOutlineEdit size={15} />
-        </BotaoEditar>
-        <form onSubmit={props.onSubmitForm}>
+        <form onSubmit={handleApagarItem}>
           <BotaoApagar type="submit">
             <AiOutlineDelete size={15} />
           </BotaoApagar>
         </form>
       </ContainerBotoes>
-    </>
+    </ItemEstilizado>
   );
 }
-
-const CampoItem = styled.input`
-  width: 100%;
-  margin-right: 5px;
-  margin-left: 5px;
-  font-size: 15px;
-`;
 
 const ItemEstilizado = styled.li`
   list-style: none;
@@ -136,20 +71,8 @@ const ItemEstilizado = styled.li`
   }
 `;
 
-const BotaoEditar = styled(Botao)`
-  background-color: gold;
-`;
-
 const BotaoApagar = styled(Botao)`
   background-color: orangered;
-`;
-
-const BotaoSalvar = styled(Botao)`
-  background-color: chartreuse;
-`;
-
-const BotaoCancelar = styled(Botao)`
-  background-color: palevioletred;
 `;
 
 const TarefaTitulo = styled.span`
@@ -181,35 +104,3 @@ export const ItemListaVaziaEstilizado = styled.li`
   padding: 10px;
   border-radius: 10px;
 `;
-
-interface FormularioEdicaoProps {
-  valorCampo: string;
-}
-
-export function FormularioEdicao(props: FormularioEdicaoProps) {
-  const valoresIniciais: FormTypes = {
-    tarefa: props.valorCampo || '',
-  };
-  
-  return (
-    <Formik
-      initialValues={valoresIniciais}
-      validationSchema={validacao}
-      onSubmit={() => {}}
-    >
-      {({ errors, touched, values }) => (
-        <Form>
-          <Campo
-            id="tarefa"
-            name="tarefa"
-            type="text"
-            placeholder="Nome da tarefa"
-            value={values.tarefa}
-            erro={(errors.tarefa && touched.tarefa) ? (<Mensagem mensagem={errors.tarefa}/>) : null}
-          />
-        </Form>
-      )}
-      
-    </Formik>
-  );
-}
